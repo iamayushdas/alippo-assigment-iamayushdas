@@ -2,6 +2,7 @@
 
 ## Deployed URL
 
+`https://alippo-assigment-iamayushdas.vercel.app/`
 
 ## Folder Structure
 
