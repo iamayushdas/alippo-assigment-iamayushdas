@@ -4,6 +4,7 @@ import "../shared/Table.css";
 import { TableProps } from "../types/types";
 
 const Table: React.FC<TableProps> = ({ data, onDataChange }) => {
+  const [page, setPage] = useState(1);
   const [selectedRowAndType, setSelectedRowAndType] = useState<{
     row: any | null;
     type: "edit" | "delete" | null;
@@ -36,6 +37,12 @@ const Table: React.FC<TableProps> = ({ data, onDataChange }) => {
     setSelectedRowAndType({ row: null, type: null });
   };
 
+  console.log("data", data.length);
+
+  const selectPageHandler = (selectedPage: number) => {
+    setPage(selectedPage);
+  };
+
   return (
     <div>
       <table className="table">
@@ -50,7 +57,7 @@ const Table: React.FC<TableProps> = ({ data, onDataChange }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {data.slice(page*5 - 5, page*5).map((row, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{row.name ?? "-"}</td>
@@ -72,6 +79,16 @@ const Table: React.FC<TableProps> = ({ data, onDataChange }) => {
           ))}
         </tbody>
       </table>
+
+      {data && data?.length > 0 && (
+        <div>
+          <span onClick={() => selectPageHandler(page-1)}>◀️</span>
+          {[...Array(Math.ceil(data?.length / 5))].map((_, i) => {
+            return <span onClick={() => selectPageHandler(i+1)}>{i + 1}</span>;
+          })}
+          <span onClick={() => selectPageHandler(page+1)}>▶️</span>
+        </div>
+      )}
 
       {selectedRowAndType.row && selectedRowAndType.type && (
         <Modal
